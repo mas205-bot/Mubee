@@ -1,0 +1,6 @@
+{
+  "name": "FixBeforeBuy - Smart Appliance Repair-or-Replace System",
+  "description": "Mechanic-grade decision support platform that diagnoses faulty appliances, calculates repair vs replace economics, tracks repair estimates, and connects users to certified service centers.",
+  "requestFramePermissions": ["notifications", "geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

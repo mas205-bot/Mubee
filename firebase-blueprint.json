@@ -1,0 +1,116 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Registered app user profile",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique Firebase UID" },
+        "email": { "type": "string", "description": "User email address" },
+        "name": { "type": "string", "description": "Display name" },
+        "role": { "type": "string", "enum": ["user", "technician", "admin"] },
+        "createdAt": { "type": "string", "description": "ISO timestamp" }
+      },
+      "required": ["id", "email"]
+    },
+    "DiagnosticSession": {
+      "title": "DiagnosticSession",
+      "description": "Appliance diagnostic session and repair-or-replace decision record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "applianceType": { "type": "string" },
+        "brand": { "type": "string" },
+        "modelNumber": { "type": "string" },
+        "ageYears": { "type": "number" },
+        "expectedLifespanYears": { "type": "number" },
+        "originalPrice": { "type": "number" },
+        "estimatedRepairCost": { "type": "number" },
+        "replacementCost": { "type": "number" },
+        "problemTitle": { "type": "string" },
+        "symptoms": { "type": "array" },
+        "severity": { "type": "string", "enum": ["low", "moderate", "critical"] },
+        "recommendation": { "type": "string", "enum": ["REPAIR", "REPLACE", "CONSULT_PRO"] },
+        "recommendationReason": { "type": "string" },
+        "estimatedSavings": { "type": "number" },
+        "carbonSavingsKg": { "type": "number" },
+        "fiftyPercentRuleTriggered": { "type": "boolean" },
+        "diyChecklist": { "type": "array" },
+        "attachedFileIds": { "type": "array" },
+        "status": { "type": "string", "enum": ["active", "resolved", "archived"] },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "userId", "applianceType", "problemTitle", "recommendation"]
+    },
+    "RepairEstimate": {
+      "title": "RepairEstimate",
+      "description": "Itemized repair estimate proposal from service center",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "diagnosticSessionId": { "type": "string" },
+        "applianceDescription": { "type": "string" },
+        "serviceCenterName": { "type": "string" },
+        "serviceCenterPhone": { "type": "string" },
+        "partsCost": { "type": "number" },
+        "laborCost": { "type": "number" },
+        "taxAndFees": { "type": "number" },
+        "totalCost": { "type": "number" },
+        "warrantyMonths": { "type": "number" },
+        "validUntil": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected", "completed"] },
+        "notes": { "type": "string" },
+        "attachedFileIds": { "type": "array" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "userId", "applianceDescription", "serviceCenterName", "totalCost"]
+    },
+    "ServiceCenter": {
+      "title": "ServiceCenter",
+      "description": "Certified appliance repair service center or store",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "centerType": { "type": "string", "enum": ["repair_service", "appliance_store"] },
+        "address": { "type": "string" },
+        "city": { "type": "string" },
+        "state": { "type": "string" },
+        "zip": { "type": "string" },
+        "latitude": { "type": "number" },
+        "longitude": { "type": "number" },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "rating": { "type": "number" },
+        "reviewCount": { "type": "number" },
+        "specialties": { "type": "array" },
+        "certifiedBrands": { "type": "array" },
+        "hourlyRateEstimate": { "type": "number" },
+        "hasMobileDispatch": { "type": "boolean" },
+        "isOpen": { "type": "boolean" }
+      },
+      "required": ["id", "name", "address", "phone"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "User profile information"
+    },
+    "/users/{userId}/diagnostics/{diagnosticId}": {
+      "schema": { "$ref": "#/entities/DiagnosticSession" },
+      "description": "User diagnostic sessions"
+    },
+    "/users/{userId}/estimates/{estimateId}": {
+      "schema": { "$ref": "#/entities/RepairEstimate" },
+      "description": "User repair quotes and estimates"
+    },
+    "/serviceCenters/{serviceCenterId}": {
+      "schema": { "$ref": "#/entities/ServiceCenter" },
+      "description": "Directory of certified appliance service centers"
+    }
+  }
+}
